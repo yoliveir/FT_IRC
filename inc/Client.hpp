@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 # include <poll.h>
 # include <sys/socket.h>
@@ -9,9 +9,11 @@
 class Client
 {
 private:
-	int					_fd_socket;
-	bool				_authenticated;
+	const int	_fd_socket;
+	bool		_authenticated;
 
 public:
-	Client(void);
+	Client(const int fd_socket);
+	~Client(void);
+	int get_fd_socket() const;
 };

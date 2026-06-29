@@ -1,1 +1,1 @@
-objs/main.o: src/main.cpp inc/server.hpp
+objs/main.o: src/main.cpp inc/Server.hpp inc/Client.hpp

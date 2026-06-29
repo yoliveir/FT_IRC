@@ -12,7 +12,7 @@
 # include <stdio.h>
 # define FD_SOCKET_SERVER 0
 # define CLIENT_WAIT_LIST 10
-# define MSG_BUFFER 1000
+# define MSG_BUFFER 5
 # define FD_LIST_NUMBER 10 //! Esto es una solución temporal creo
 # define POLL_TIMEOUT 10
 
@@ -23,9 +23,10 @@ private:
 	const int			_server_fd_socket;
 	struct sockaddr_in	_address; // direcion socket INternet
 
-	int					_sockets_in_list;
+	int					_n_socket_used;
 	unsigned char		_msg_buffer[MSG_BUFFER];
 	struct pollfd		_fd_list_sockets[FD_LIST_NUMBER];
+	void	welcome(const int fd_client);
 
 public:
 	Server(char *port, std::string password);
