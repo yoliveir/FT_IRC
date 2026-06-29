@@ -60,8 +60,8 @@
 
 	while (1)
 	{
-		poll_candidate[FD_SOCKET_SERVER].fd = fd_socket;
-		poll_candidate[FD_SOCKET_SERVER].events = POLLIN;
+		// poll_candidate[FD_SOCKET_SERVER].fd = fd_socket;
+		// poll_candidate[FD_SOCKET_SERVER].events = POLLIN;
 		int read_pending_count = poll(poll_candidate, total_sockets_fd, 10);
 
 		if (poll_candidate[FD_SOCKET_SERVER].revents ==  POLLIN)
