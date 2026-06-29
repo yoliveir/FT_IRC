@@ -50,6 +50,11 @@ void Server::welcome(int fd_client)
 
 }
 
+void	Server::parser_msg() const
+{
+	
+}
+
 void	Server::check_if_client_ready()
 {
 	for (int i = 1; i < _n_socket_used; i++)
@@ -58,6 +63,7 @@ void	Server::check_if_client_ready()
 		{
 			recv(_fd_list_sockets[i].fd, _msg_buffer, MSG_BUFFER, 0);
 			std::cout << _msg_buffer << "\n";
+			parser_msg();
 			memset(_msg_buffer, '\0', MSG_BUFFER);
 		}
 	}

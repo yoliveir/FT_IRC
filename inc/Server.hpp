@@ -27,7 +27,8 @@ private:
 	unsigned char		_msg_buffer[MSG_BUFFER];
 	struct pollfd		_fd_list_sockets[FD_LIST_NUMBER];
 	void	welcome(const int fd_client);
-	void check_if_client_ready();
+	void	check_if_client_ready();
+	void	Server::parser_msg() const;
 
 public:
 	Server(char *port, std::string password);
