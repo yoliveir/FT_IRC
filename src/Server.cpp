@@ -30,9 +30,15 @@ Server::~Server()
 
 void	Server::insert_into_socket_list(const int fd_socket)
 {
+	if (fd_socket == -1)
+	{
+		perror("aaaaaaaaaaaah: "); 
+		exit(1);
+	}
 	_fd_list_sockets[_n_socket_used].fd = fd_socket;
 	_fd_list_sockets[_n_socket_used].events = POLLIN;
 	++_n_socket_used;
+
 }
 
 
@@ -44,6 +50,19 @@ void Server::welcome(int fd_client)
 
 }
 
+void	Server::check_if_client_ready()
+{
+	for (int i = 1; i < _n_socket_used; i++)
+	{
+		if (_fd_list_sockets[i].revents & POLLIN)
+		{
+			recv(_fd_list_sockets[i].fd, _msg_buffer, MSG_BUFFER, 0);
+			std::cout << _msg_buffer << "\n";
+			memset(_msg_buffer, '\0', MSG_BUFFER);
+		}
+	}
+}
+
 void	Server::swich_server_on(void)
 {
 	while (true)
@@ -53,8 +72,11 @@ void	Server::swich_server_on(void)
 		if (_fd_list_sockets[FD_SOCKET_SERVER].revents == POLLIN)
 		{
 			Client	client(accept(_server_fd_socket, NULL, NULL));
+			//!fcntl USAR AQUIIO¡
+
 			insert_into_socket_list(client.get_fd_socket());
 			welcome(client.get_fd_socket());
 		}
+		check_if_client_ready();
 	}
 }

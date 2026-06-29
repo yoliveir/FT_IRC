@@ -27,6 +27,7 @@ private:
 	unsigned char		_msg_buffer[MSG_BUFFER];
 	struct pollfd		_fd_list_sockets[FD_LIST_NUMBER];
 	void	welcome(const int fd_client);
+	void check_if_client_ready();
 
 public:
 	Server(char *port, std::string password);
@@ -34,3 +35,12 @@ public:
 	void	swich_server_on(void);
 	~Server();
 };
+
+/*
+SUPOSTORIOS DE FASES:
+
+	fase 1: montar el servidor;
+	fase 2: emezar a parsear los mensajes del usuario;
+	fase 3: mplementar comaandos;
+	
+*/
