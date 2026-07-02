@@ -1,5 +1,5 @@
 #include "Server.hpp"
-#include "Client.hpp"
+#include "User.hpp"
 
 Server::Server(char *port, std::string password) :
 													_password(password),
@@ -44,27 +44,110 @@ void	Server::insert_into_socket_list(const int fd_socket)
 
 #include <sys/time.h>
 // extern ssize_t send (int __fd, const void *__buf, size_t __n, int __flags);
-void Server::welcome(int fd_client)
+void Server::welcome(int fd_user)
 {
-	send(fd_client, "BiEnVeNiD@", 10, 0);
+	send(fd_user, "BiEnVeNiD@\n", 11, 0);
 
 }
+// esto es de  comunicador
+const std::string Server::extract_cmd() const
+{
+	std::string msg_buffer((char *)_msg_buffer);
+	std::string command;
+	int len_command = msg_buffer.find(" ", 0);
+	command = msg_buffer.substr(0, len_command);
+	return (command);
+ }
+
+#define CMDS_QUANTITY 9
 
 void	Server::parser_msg() const
 {
-	
+	std::string command = extract_cmd();
+	const std::string string_array[CMDS_QUANTITY] = 
+	{
+		"PASS",
+		"NICK",
+		"USER",
+		"JOIN",
+		"PRIVMSG",
+		"KICK",
+		"INVITE",
+		"TOPIC",
+		"MODE"
+	};
+
+	int cases = 0;
+	while (cases < CMDS_QUANTITY)
+	{
+		if (string_array[cases] == command)
+		{
+			break ;
+		}
+		cases++;
+	}
+	std::cout << "cases = " << cases << "\n";
+	switch (cases)
+	{
+		case 0:
+			std::cout << string_array[cases] << "!!!!!!!!!000\n";
+			break;
+		case 1:
+			std::cout << string_array[cases] << "!!!!!!!!!111\n";
+			break;
+		case 2:
+			std::cout << string_array[cases] << "!!!!!!!!!222\n";
+			break;
+		case 3:
+			std::cout << string_array[cases] << "!!!!!!!!!333\n";
+			break;
+		case 4:
+			std::cout << string_array[cases] << "!!!!!!!!!4444\n";
+			break;
+		case 5:
+			std::cout << string_array[cases] << "!!!!!!!!!555\n";
+			break;
+		case 6:
+			std::cout << string_array[cases] << "!!!!!!!!!666\n";
+			break;
+		case 7:
+			std::cout << string_array[cases] << "!!!!!!!!!777\n";
+			break;
+		case 8:
+			std::cout << string_array[cases] << "!!!!!!!!!888\n";
+			break;
+		default:
+			std::cerr << "ERRORRRRR COMANDO NO ENCONTRADOOOOOOOOO\n";
+	}
+
 }
 
-void	Server::check_if_client_ready()
+
+/* void	Server::disconect_user(int fd, int index)
 {
+	close(fd);
+	this->_n_socket_used;
+	_fd_list_sockets;
+}
+ */
+void	Server::check_if_user_ready()
+{
+	int			error_code;
+	socklen_t	error_code_size = sizeof(int);
+
 	for (int i = 1; i < _n_socket_used; i++)
 	{
-		if (_fd_list_sockets[i].revents & POLLIN)
+		if (_fd_list_sockets[i].revents == POLLIN)
 		{
-			recv(_fd_list_sockets[i].fd, _msg_buffer, MSG_BUFFER, 0);
-			std::cout << _msg_buffer << "\n";
-			parser_msg();
-			memset(_msg_buffer, '\0', MSG_BUFFER);
+			if(recv(_fd_list_sockets[i].fd, _msg_buffer, MSG_BUFFER, 0) == 0)
+				// disconect_user(_fd_list_sockets[i].fd, i);
+				std::cout << "user desconectado\n";
+			else
+			{
+				std::cout << "User (fd: " << _fd_list_sockets[i].fd << ") sent: " << _msg_buffer << "\n";
+				parser_msg();
+				memset(_msg_buffer, '\0', MSG_BUFFER);
+			}
 		}
 	}
 }
@@ -77,12 +160,12 @@ void	Server::swich_server_on(void)
 		
 		if (_fd_list_sockets[FD_SOCKET_SERVER].revents == POLLIN)
 		{
-			Client	client(accept(_server_fd_socket, NULL, NULL));
+			User	user(accept(_server_fd_socket, NULL, NULL));
 			//!fcntl USAR AQUIIO¡
 
-			insert_into_socket_list(client.get_fd_socket());
-			welcome(client.get_fd_socket());
+			insert_into_socket_list(user.get_fd_socket());
+			welcome(user.get_fd_socket());
 		}
-		check_if_client_ready();
+		check_if_user_ready();
 	}
 }

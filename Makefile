@@ -11,7 +11,7 @@ CPPFLAGS += -std=c++98
 
 RM = rm -rf
 
-SRCS = $(SRC_DIR)Client.cpp $(SRC_DIR)main.cpp $(SRC_DIR)Server.cpp 
+SRCS = $(SRC_DIR)User.cpp $(SRC_DIR)main.cpp $(SRC_DIR)Server.cpp 
 
 OBJS = $(patsubst $(SRC_DIR)%.cpp, $(OBJS_DIR)%.o, $(SRCS))
 

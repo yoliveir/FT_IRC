@@ -1,7 +1,7 @@
 #_42
 Argumentos:
 - puerto de conexión: El puerto de nuestro servidor, nuestro programa tendrá que estar a la escucha de este.
-- Contraseña de conexión: La necesitará el cliente para poderse conectar al servidor.
+- Contraseña de conexión: La necesitará el usere para poderse conectar al servidor.
 
 # <mark style="background: #78a3ebAA; color:bbbbbb; padding: 2px 20px 2px 20px ">Funciones externas permitidas:</mark>
 
@@ -60,7 +60,7 @@ Esta estructura es genérica, la dirección es un array sin más y es por tanto 
 Marca el socket indicado en sockfd como un socket pasico, es decir, que va a ser usado para recibir peticiones de conexión con *accept*.
 - El socket debe ser tipo SOCK_STREAM o SOCK_SEQPACKET. El socket que estamos usando nosotros para el ft_irc es tipo SOCK_STREAM.
 	- <span style="color:rgb(199, 67, 67)">??? Cuál es la diferencia entre ambos?</span>
-- backlog es el número máximo de la cola de peticiones de conexión pendientes. Si una petición llega cuando la cola ya está llena, el cliente recibirá un error de que la conexión se ha rechazado.
+- backlog es el número máximo de la cola de peticiones de conexión pendientes. Si una petición llega cuando la cola ya está llena, el usere recibirá un error de que la conexión se ha rechazado.
 
 
 
@@ -141,12 +141,12 @@ struct pollfd {
 };
 ```
 
-- El *fd* al que debemos estar atentos. Es decir, el fd del cliente que se haya conectado al servidor. Tenemos que meter el fd de cada cliente que se conecte en el array de pollfd para que podamos mantener la conexión  todos ellos.
-- *events*: Parámetro de input, una máscara de bits que especifica qué eventos le interesan al servidor de input del cliente.
+- El *fd* al que debemos estar atentos. Es decir, el fd del usere que se haya conectado al servidor. Tenemos que meter el fd de cada usere que se conecte en el array de pollfd para que podamos mantener la conexión  todos ellos.
+- *events*: Parámetro de input, una máscara de bits que especifica qué eventos le interesan al servidor de input del usere.
 - *revents*: Lo mismo pero para el output.
 
-	- `POLLIN`: Nos va a interesar para leer datos del cliente.
-	- `POLLOUT`: Se puede escribir, <span style="color:rgb(199, 67, 67)">pero el servidor al cliente o el cliente al servidor???</span> 
+	- `POLLIN`: Nos va a interesar para leer datos del usere.
+	- `POLLOUT`: Se puede escribir, <span style="color:rgb(199, 67, 67)">pero el servidor al usere o el usere al servidor???</span> 
 
 Por ahora sólo hemos usado pollin jeje
 
@@ -163,8 +163,8 @@ Pueden ser
 - TCP Socket - Stream Socket
 - UDP Socket - Datagrama socket. Más rápido pero no fiable.
 
-Siguen una arquitectura cliente-servidor.
-![[socket-cliente-servidor.png | 300]]
+Siguen una arquitectura usere-servidor.
+![[socket-usere-servidor.png | 300]]
 
 
 

@@ -6,14 +6,14 @@
 
 
 #define FD_SOCKET_SERVER 0
-class Client
+class User
 {
 private:
 	const int	_fd_socket;
 	bool		_authenticated;
 
 public:
-	Client(const int fd_socket);
-	~Client(void);
+	User(const int fd_socket);
+	~User(void);
 	int get_fd_socket() const;
 };
