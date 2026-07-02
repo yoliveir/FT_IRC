@@ -7,7 +7,7 @@
 # include <unistd.h>
 # include <poll.h>
 # include <stdlib.h>
-
+#include "CommandManager.hpp"
 # include <cstring>
 # include <stdio.h>
 # define FD_SOCKET_SERVER 0
@@ -19,6 +19,7 @@
 class Server
 {
 private:
+	CommandManager _commandManager;
 	const std::string	_password;
 	const int			_server_fd_socket;
 	struct sockaddr_in	_address; // direcion socket INternet
@@ -28,7 +29,7 @@ private:
 	struct pollfd		_fd_list_sockets[FD_LIST_NUMBER];
 	void	welcome(const int fd_user);
 	void	check_if_user_ready();
-	void	parser_msg() const;
+	void	parser_msg();
 
 public:
 	Server(char *port, std::string password);

@@ -61,7 +61,7 @@ const std::string Server::extract_cmd() const
 
 #define CMDS_QUANTITY 9
 
-void	Server::parser_msg() const
+void	Server::parser_msg()
 {
 	std::string command = extract_cmd();
 	const std::string string_array[CMDS_QUANTITY] = 
@@ -86,39 +86,9 @@ void	Server::parser_msg() const
 		}
 		cases++;
 	}
-	std::cout << "cases = " << cases << "\n";
-	switch (cases)
-	{
-		case 0:
-			std::cout << string_array[cases] << "!!!!!!!!!000\n";
-			break;
-		case 1:
-			std::cout << string_array[cases] << "!!!!!!!!!111\n";
-			break;
-		case 2:
-			std::cout << string_array[cases] << "!!!!!!!!!222\n";
-			break;
-		case 3:
-			std::cout << string_array[cases] << "!!!!!!!!!333\n";
-			break;
-		case 4:
-			std::cout << string_array[cases] << "!!!!!!!!!4444\n";
-			break;
-		case 5:
-			std::cout << string_array[cases] << "!!!!!!!!!555\n";
-			break;
-		case 6:
-			std::cout << string_array[cases] << "!!!!!!!!!666\n";
-			break;
-		case 7:
-			std::cout << string_array[cases] << "!!!!!!!!!777\n";
-			break;
-		case 8:
-			std::cout << string_array[cases] << "!!!!!!!!!888\n";
-			break;
-		default:
-			std::cerr << "ERRORRRRR COMANDO NO ENCONTRADOOOOOOOOO\n";
-	}
+	std::string command = extract_cmd();
+	// Necesito el FD de cliente
+	//_commandManager.execute(*this, _fd_list_sockets[i].fd, command);
 
 }
 
