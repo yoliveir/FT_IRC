@@ -75,7 +75,7 @@ void	Server::check_if_user_ready()
 			else
 			{
 				std::cout << "User (fd: " << _fd_list_sockets[i].fd << ") sent: " << _msg_buffer << "\n";
-				parser.parseMsg(std::string((char *)_msg_buffer), _fd_list_sockets[i].fd);
+				parser.parseMsg(std::string((char *)_msg_buffer), _fd_list_sockets[i].fd, *this);
 				memset(_msg_buffer, '\0', MSG_BUFFER);
 			}
 		}

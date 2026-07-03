@@ -12,9 +12,9 @@
 
 CommandManager::CommandManager()
 {
-	// _commands["PASS"] = new Pass();
-	// _commands["NICK"] = new Nick();
-	// _commands["USER"] = new User();
+	_commands["PASS"] = new Pass();
+	_commands["NICK"] = new Nick();
+	//_commands["USER"] = new User();
 	// _commands["JOIN"] = new Join();
 	// _commands["PRIVMSG"] = new PrivMsg();
 	// _commands["KICK"] = new Kick();
@@ -30,17 +30,16 @@ CommandManager::~CommandManager()
 		delete it->second;
 }
 
-void CommandManager::execute(Server& server,
-							 User& user,
-							 const std::string& command)
+// en un futuro tambien debera recivir channel
+void CommandManager::execute(Server &server, User &user, const std::vector<std::string> &args) //hemos camb iado comands con args y en veez de ser un string es vector entero
 {
-	std::map<std::string, ACommand*>::iterator it = _commands.find(command);
+	std::map<std::string, ACommand*>::iterator it = _commands.find(args.at(0));
 
 	if (it == _commands.end())
 	{
 		std::cerr << "Unknown command\n";
-		return;
+		return ;
 	}
 
-	it->second->execute(server, user, std::vector<std::string>());
+	it->second->execute(server, user, args);
 }
