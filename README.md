@@ -1,5 +1,5 @@
 # FT_IRC
-El royecto IRC con el Gupo A.
+El Proyecto IRC con el Grupo A.
 
 vamo a empezar: a 
 
