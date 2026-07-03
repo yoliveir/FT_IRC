@@ -9,6 +9,6 @@ public:
 	~Join();
 
 	int execute(Server& server,
-				Client& client,
+				User& user,
 				const std::vector<std::string>& args);
 };

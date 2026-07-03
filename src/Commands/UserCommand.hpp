@@ -9,6 +9,6 @@ public:
 	~UserCommand();
 
 	int execute(Server& server,
-				Client& client,
+				User& User,
 				const std::vector<std::string>& args);
 };

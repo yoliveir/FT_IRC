@@ -12,7 +12,7 @@ CXXFLAGS += -std=c++98
 RM = rm -rf
 
 SRCS = $(SRC_DIR)main.cpp $(SRC_DIR)Server.cpp $(SRC_DIR)User.cpp \
-		$(SRC_DIR)Parser/Parser.cpp
+		$(SRC_DIR)Parser/Parser.cpp $(SRC_DIR)Commands/CommandManager.cpp $(SRC_DIR)Commands/Pass.cpp $(SRC_DIR)Commands/Nick.cpp
 
 OBJS = $(patsubst $(SRC_DIR)%.cpp, $(OBJS_DIR)%.o, $(SRCS))
 
@@ -32,6 +32,7 @@ $(OBJS_DIR)%.o: $(SRC_DIR)%.cpp
 	@echo "$(GRAY)Compiling file  →   $< $(STD)"
 	@mkdir -p $(OBJS_DIR)
 	@mkdir -p $(OBJS_DIR)/Parser
+	@mkdir -p $(OBJS_DIR)/Commands
 	$(CXX) -c -MMD $(CXXFLAGS) -o $@ $<
 
 clean:

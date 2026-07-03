@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../Commands/CommandManager.hpp"
+#include "User.hpp"
 //#include "Server.hpp"
 
 #define CMDS_QUANTITY 10

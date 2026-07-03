@@ -19,7 +19,7 @@ Server::Server(char *port, std::string password) :
 	}
 
 	//!fcntl USAR AQUI¡ fcntl(fd, F_SETFL, O_NONBLOCK)
-	listen(_server_fd_socket, CLIENT_WAIT_LIST); //listen sirve a poner e fd en eeschucha
+	listen(_server_fd_socket, User_WAIT_LIST); //listen sirve a poner e fd en eeschucha
 	std::memset(_msg_buffer, '\0', sizeof(_msg_buffer));
 	
 	//setPassword(password);

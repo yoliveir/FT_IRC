@@ -89,7 +89,7 @@ void	Parser::parseMsg(std::string raw_msg, int origin_fd, Server &server)
 {
 	std::vector	<std::string>	args = extractArgs(raw_msg);
 
-	CommandManager	commandManager();
-	commandManager.execute(server, user?!, args);
+	CommandManager	commandManager;
+	commandManager.execute(server, User::getUser(origin_fd), args);
 
 }
