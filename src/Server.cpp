@@ -1,5 +1,6 @@
 #include "Server.hpp"
 #include "User.hpp"
+#include "./Parser/Parser.hpp"
 
 Server::Server(char *port, std::string password) :
 													_password(password),
@@ -17,11 +18,11 @@ Server::Server(char *port, std::string password) :
 		exit(-1);
 	}
 
-	//!fcntl USAR AQUI¡
+	//!fcntl USAR AQUI¡ fcntl(fd, F_SETFL, O_NONBLOCK)
 	listen(_server_fd_socket, CLIENT_WAIT_LIST); //listen sirve a poner e fd en eeschucha
 	std::memset(_msg_buffer, '\0', sizeof(_msg_buffer));
 	
-	setPassword(password);
+	//setPassword(password);
 	insert_into_socket_list(_server_fd_socket);
 }
 
@@ -50,49 +51,6 @@ void Server::welcome(int fd_user)
 	send(fd_user, "BiEnVeNiD@\n", 11, 0);
 
 }
-// esto es de  comunicador
-const std::string Server::extract_cmd() const
-{
-	std::string msg_buffer((char *)_msg_buffer);
-	std::string command;
-	int len_command = msg_buffer.find(" ", 0);
-	command = msg_buffer.substr(0, len_command);
-	return (command);
- }
-
-#define CMDS_QUANTITY 9
-
-void	Server::parser_msg()
-{
-	std::string command = extract_cmd();
-	const std::string string_array[CMDS_QUANTITY] = 
-	{
-		"PASS",
-		"NICK",
-		"USER",
-		"JOIN",
-		"PRIVMSG",
-		"KICK",
-		"INVITE",
-		"TOPIC",
-		"MODE"
-	};
-
-	int cases = 0;
-	while (cases < CMDS_QUANTITY)
-	{
-		if (string_array[cases] == command)
-		{
-			break ;
-		}
-		cases++;
-	}
-	std::string command = extract_cmd();
-	// Necesito el FD de cliente
-	_commandManager.execute(*this, _fd_list_sockets[i].fd, command);
-
-}
-
 
 /* void	Server::disconect_user(int fd, int index)
 {
@@ -105,6 +63,7 @@ void	Server::check_if_user_ready()
 {
 	int			error_code;
 	socklen_t	error_code_size = sizeof(int);
+	Parser		parser;
 
 	for (int i = 1; i < _n_socket_used; i++)
 	{
@@ -116,7 +75,7 @@ void	Server::check_if_user_ready()
 			else
 			{
 				std::cout << "User (fd: " << _fd_list_sockets[i].fd << ") sent: " << _msg_buffer << "\n";
-				parser_msg();
+				parser.parseMsg(std::string((char *)_msg_buffer), _fd_list_sockets[i].fd);
 				memset(_msg_buffer, '\0', MSG_BUFFER);
 			}
 		}
