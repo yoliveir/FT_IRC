@@ -6,6 +6,7 @@
 #include "../Commands/CommandManager.hpp"
 
 #define CMDS_QUANTITY 10
+#define SPACE " "
 
 class	Parser
 {
