@@ -1,15 +1,14 @@
 #pragma once
+
 #include "ACommand.hpp"
 
-class Pass : public ACommand
+class UserCommand : public ACommand
 {
 public:
-	Pass();
-	~Pass();
+	UserCommand();
+	~UserCommand();
 
 	int execute(Server& server,
-				User& user,
+				Client& client,
 				const std::vector<std::string>& args);
 };
-
-

@@ -4,11 +4,11 @@
 # include <string>
 
 class Server;
-class Client;
+class User;
 class ACommand
 {
 public:
 	virtual ~ACommand() {}
-	virtual int execute(Server& server, Client& Client,
+	virtual int execute(Server& server, User& user,
 						const std::vector<std::string>& args) = 0;
 };

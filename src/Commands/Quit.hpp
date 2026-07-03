@@ -1,14 +1,13 @@
 #pragma once
-
 #include "ACommand.hpp"
 
-class User : public ACommand
+class Quit : public ACommand
 {
 public:
-	User();
-	~User();
+	Quit();
+	~Quit();
 
 	int execute(Server& server,
-				Client& client,
+				User& user,
 				const std::vector<std::string>& args);
 };

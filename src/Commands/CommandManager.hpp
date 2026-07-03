@@ -18,6 +18,6 @@ public:
 	~CommandManager();
 
 	void execute(Server& server,
-				 Client& client,
+				 User& user,
 				 const std::string& command);
 };

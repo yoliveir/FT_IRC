@@ -1,10 +1,10 @@
-#include "Mode.hpp"
+#include "Quit.hpp"
 
-Mode::Mode() {}
+Quit::Quit() {}
 
-Mode::~Mode() {}
+Quit::~Quit() {}
 
-int Mode::execute(Server& server,
+int Quit::execute(Server& server,
 						 User& user,
 						 const std::vector<std::string>& args)
 {

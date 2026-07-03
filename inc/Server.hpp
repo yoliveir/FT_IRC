@@ -7,7 +7,7 @@
 # include <unistd.h>
 # include <poll.h>
 # include <stdlib.h>
-#include "CommandManager.hpp"
+#include "../src/Commands/CommandManager.hpp"
 # include <cstring>
 # include <stdio.h>
 # define FD_SOCKET_SERVER 0
@@ -19,7 +19,7 @@
 class Server
 {
 private:
-	CommandManager _commandManager;
+	CommandManager 		_commandManager;
 	const std::string	_password;
 	const int			_server_fd_socket;
 	struct sockaddr_in	_address; // direcion socket INternet
@@ -27,16 +27,18 @@ private:
 	int					_n_socket_used;
 	unsigned char		_msg_buffer[MSG_BUFFER];
 	struct pollfd		_fd_list_sockets[FD_LIST_NUMBER];
-	void	welcome(const int fd_user);
-	void	check_if_user_ready();
-	void	parser_msg();
+	void				welcome(const int fd_user);
+	void				check_if_user_ready();
+	void				parser_msg();
 
 public:
 	Server(char *port, std::string password);
 	void	insert_into_socket_list(const int fd);
 	void	swich_server_on(void);
 	~Server();
-	const std::string extract_cmd() const; //el buffer puede que es algo del usere!
+	const 	std::string& getPassword() const;
+    void 	setPassword(const std::string&);
+	const 	std::string extract_cmd() const; //el buffer puede que es algo del usere!
 	void	disconect_user(int fd, int index);
 };
 

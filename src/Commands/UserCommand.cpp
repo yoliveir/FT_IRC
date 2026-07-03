@@ -1,10 +1,10 @@
-#include "Mode.hpp"
+#include "User.hpp"
 
-Mode::Mode() {}
+UserCommand::UserCommand() {}
 
-Mode::~Mode() {}
+UserCommand::~UserCommand() {}
 
-int Mode::execute(Server& server,
+int UserCommand::execute(Server& server,
 						 User& user,
 						 const std::vector<std::string>& args)
 {

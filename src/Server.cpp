@@ -20,7 +20,8 @@ Server::Server(char *port, std::string password) :
 	//!fcntl USAR AQUI¡
 	listen(_server_fd_socket, CLIENT_WAIT_LIST); //listen sirve a poner e fd en eeschucha
 	std::memset(_msg_buffer, '\0', sizeof(_msg_buffer));
-
+	
+	setPassword(password);
 	insert_into_socket_list(_server_fd_socket);
 }
 
@@ -88,7 +89,7 @@ void	Server::parser_msg()
 	}
 	std::string command = extract_cmd();
 	// Necesito el FD de cliente
-	//_commandManager.execute(*this, _fd_list_sockets[i].fd, command);
+	_commandManager.execute(*this, _fd_list_sockets[i].fd, command);
 
 }
 

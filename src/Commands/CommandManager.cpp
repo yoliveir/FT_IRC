@@ -31,7 +31,7 @@ CommandManager::~CommandManager()
 }
 
 void CommandManager::execute(Server& server,
-							 Client& client,
+							 User& user,
 							 const std::string& command)
 {
 	std::map<std::string, ACommand*>::iterator it = _commands.find(command);
@@ -42,5 +42,5 @@ void CommandManager::execute(Server& server,
 		return;
 	}
 
-	it->second->execute(server, client, std::vector<std::string>());
+	it->second->execute(server, user, std::vector<std::string>());
 }
