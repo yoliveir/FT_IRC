@@ -5,11 +5,11 @@ Topic::Topic() {}
 Topic::~Topic() {}
 
 int Topic::execute(Server& server,
-						  Client& client,
+						  User& User,
 						  const std::vector<std::string>& args)
 {
 	(void)server;
-	(void)client;
+	(void)User;
 	(void)args;
 
 	return (0);

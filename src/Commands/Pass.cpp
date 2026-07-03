@@ -16,13 +16,13 @@ if (args.size() < 2)
         return (1);
     }
 
-    if (args[1] != server.getPassword())
-    {
-        send(user.get_fd_socket(), "464 Password incorrect\r\n", 24, 0);
-        return (1);
-    }
+    // if (args[1] != server.getPassword())
+    // {
+    //     send(user.get_fd_socket(), "464 Password incorrect\r\n", 24, 0);
+    //     return (1);
+    // }
 
-    user.setAuthenticated(true);
+    // user.setAuthenticated(true);
 
     return (0);
 }

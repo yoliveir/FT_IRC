@@ -9,6 +9,6 @@ public:
 	~Topic();
 
 	int execute(Server& server,
-				Client& client,
+				User& User,
 				const std::vector<std::string>& args);
 };

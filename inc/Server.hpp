@@ -11,7 +11,7 @@
 # include <cstring>
 # include <stdio.h>
 # define FD_SOCKET_SERVER 0
-# define CLIENT_WAIT_LIST 10
+# define User_WAIT_LIST 10
 # define MSG_BUFFER 512
 # define FD_LIST_NUMBER 10 //! Esto es una solución temporal creo
 # define POLL_TIMEOUT 10
