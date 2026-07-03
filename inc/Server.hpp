@@ -19,7 +19,7 @@
 class Server
 {
 private:
-	CommandManager 		_commandManager;
+//	CommandManager 		_commandManager; Lo he quitado de aquí y está dentro de Parser::parseMsg();
 	const std::string	_password;
 	const int			_server_fd_socket;
 	struct sockaddr_in	_address; // direcion socket INternet

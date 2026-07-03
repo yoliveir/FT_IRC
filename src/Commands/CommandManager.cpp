@@ -12,15 +12,15 @@
 
 CommandManager::CommandManager()
 {
-	_commands["PASS"] = new Pass();
-	_commands["NICK"] = new Nick();
-	_commands["USER"] = new User();
-	_commands["JOIN"] = new Join();
-	_commands["PRIVMSG"] = new PrivMsg();
-	_commands["KICK"] = new Kick();
-	_commands["INVITE"] = new Invite();
-	_commands["TOPIC"] = new Topic();
-	_commands["MODE"] = new Mode();
+	// _commands["PASS"] = new Pass();
+	// _commands["NICK"] = new Nick();
+	// _commands["USER"] = new User();
+	// _commands["JOIN"] = new Join();
+	// _commands["PRIVMSG"] = new PrivMsg();
+	// _commands["KICK"] = new Kick();
+	// _commands["INVITE"] = new Invite();
+	// _commands["TOPIC"] = new Topic();
+	// _commands["MODE"] = new Mode();
 }
 
 CommandManager::~CommandManager()
