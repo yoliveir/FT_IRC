@@ -2,6 +2,8 @@
 #include "User.hpp"
 #include "./Parser/Parser.hpp"
 
+#include <fcntl.h>
+
 Server::Server(char *port, std::string password) :
 													_password(password),
 													_server_fd_socket(socket(AF_INET, SOCK_STREAM, 0)),
@@ -19,6 +21,7 @@ Server::Server(char *port, std::string password) :
 	}
 
 	//!fcntl USAR AQUI¡ fcntl(fd, F_SETFL, O_NONBLOCK)
+	fcntl(_server_fd_socket, F_SETFL, O_NONBLOCK);
 	listen(_server_fd_socket, User_WAIT_LIST); //listen sirve a poner e fd en eeschucha
 	std::memset(_msg_buffer, '\0', sizeof(_msg_buffer));
 	
@@ -52,13 +55,17 @@ void Server::welcome(int fd_user)
 
 }
 
-/* void	Server::disconect_user(int fd, int index)
+void	Server::disconect_user(int fd, int index)
 {
 	close(fd);
-	this->_n_socket_used;
-	_fd_list_sockets;
+	// this->_n_socket_used;
+	// _fd_list_sockets;
+	std::cout << "user " << User::getUser(fd).getUsername() << "(" << fd<< ") desconectado\n";
+	if (index == _n_socket_used - 1)
+	{
+	}
 }
- */
+
 void	Server::check_if_user_ready()
 {
 	int			error_code;
@@ -67,11 +74,13 @@ void	Server::check_if_user_ready()
 
 	for (int i = 1; i < _n_socket_used; i++)
 	{
+		std::cout << "__" << i << "__\n";
 		if (_fd_list_sockets[i].revents == POLLIN)
 		{
 			if(recv(_fd_list_sockets[i].fd, _msg_buffer, MSG_BUFFER, 0) == 0)
-				// disconect_user(_fd_list_sockets[i].fd, i);
-				std::cout << "user desconectado\n";
+			{
+				disconect_user(_fd_list_sockets[i].fd, i);
+			}
 			else
 			{
 				std::cout << "User (fd: " << _fd_list_sockets[i].fd << ") sent: " << _msg_buffer << "\n";
