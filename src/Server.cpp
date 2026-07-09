@@ -2,7 +2,7 @@
 #include "User.hpp"
 #include "./Parser/Parser.hpp"
 
-#include <fcntl.h>
+bool	Server::_server_on = true;
 
 Server::Server(char *port, std::string password) :
 													_password(password),
@@ -20,9 +20,8 @@ Server::Server(char *port, std::string password) :
 		exit(-1);
 	}
 
-	//!fcntl USAR AQUI¡ fcntl(fd, F_SETFL, O_NONBLOCK)
 	fcntl(_server_fd_socket, F_SETFL, O_NONBLOCK);
-	listen(_server_fd_socket, User_WAIT_LIST); //listen sirve a poner e fd en eeschucha
+	listen(_server_fd_socket, USER_WAIT_LIST); //listen sirve a poner e fd en eeschucha
 	std::memset(_msg_buffer, '\0', sizeof(_msg_buffer));
 	
 	//setPassword(password);
@@ -42,6 +41,7 @@ void	Server::insert_into_socket_list(const int fd_socket)
 	}
 	_fd_list_sockets[_n_socket_used].fd = fd_socket;
 	_fd_list_sockets[_n_socket_used].events = POLLIN;
+	fcntl(fd_socket, F_SETFL, O_NONBLOCK);
 	++_n_socket_used;
 
 }
@@ -58,32 +58,31 @@ void Server::welcome(int fd_user)
 void	Server::disconect_user(int fd, int index)
 {
 	close(fd);
-	// this->_n_socket_used;
-	// _fd_list_sockets;
+	if (index != _n_socket_used - 1)
+		_fd_list_sockets[index] = _fd_list_sockets[_n_socket_used - 1];
+	--_n_socket_used;
 	std::cout << "user " << User::getUser(fd).getUsername() << "(" << fd<< ") desconectado\n";
-	if (index == _n_socket_used - 1)
-	{
-	}
 }
 
 void	Server::check_if_user_ready()
 {
 	int			error_code;
+	int			recv_result;
 	socklen_t	error_code_size = sizeof(int);
 	Parser		parser;
 
 	for (int i = 1; i < _n_socket_used; i++)
 	{
-		std::cout << "__" << i << "__\n";
 		if (_fd_list_sockets[i].revents == POLLIN)
 		{
-			if(recv(_fd_list_sockets[i].fd, _msg_buffer, MSG_BUFFER, 0) == 0)
+			recv_result = recv(_fd_list_sockets[i].fd, _msg_buffer, MSG_BUFFER, 0);
+			if(recv_result == 0)
 			{
 				disconect_user(_fd_list_sockets[i].fd, i);
 			}
-			else
+			else if (recv_result > 0)
 			{
-				std::cout << "User (fd: " << _fd_list_sockets[i].fd << ") sent: " << _msg_buffer << "\n";
+				std::cout << "User (fd: " << _fd_list_sockets[i].fd << ") sent [" << _msg_buffer << "]\n";
 				parser.parseMsg(std::string((char *)_msg_buffer), _fd_list_sockets[i].fd, *this);
 				memset(_msg_buffer, '\0', MSG_BUFFER);
 			}
@@ -91,17 +90,39 @@ void	Server::check_if_user_ready()
 	}
 }
 
-void	Server::swich_server_on(void)
+void	Server::switchServerOff(void)
 {
+	std::cout << "Hasta luego maricarmen\n";
+
+	close(_server_fd_socket);
+	for (int i = 0; i < _n_socket_used; ++i)
+	{
+		send(_fd_list_sockets[i].fd, "Server close conection.\n", 24, 0);
+		close(_fd_list_sockets[i].fd);
+	}
+}
+
+void	Server::signalHandler(int signal)
+{
+	(void) signal;
+	_server_on = false;
+}
+
+void	Server::switchServerOn(void)
+{
+	signal(SIGINT, signalHandler);
 	while (true)
 	{
+		if (_server_on == false)
+		{
+			switchServerOff();
+			return ;
+		}
 		int read_pending_count = poll(_fd_list_sockets, _n_socket_used, POLL_TIMEOUT);
 		
 		if (_fd_list_sockets[FD_SOCKET_SERVER].revents == POLLIN)
 		{
 			User	user(accept(_server_fd_socket, NULL, NULL));
-			//!fcntl USAR AQUIIO¡
-
 			insert_into_socket_list(user.get_fd_socket());
 			welcome(user.get_fd_socket());
 		}

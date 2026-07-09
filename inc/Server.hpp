@@ -7,11 +7,14 @@
 # include <unistd.h>
 # include <poll.h>
 # include <stdlib.h>
-#include "../src/Commands/CommandManager.hpp"
+# include "../src/Commands/CommandManager.hpp"
 # include <cstring>
 # include <stdio.h>
+# include <fcntl.h>
+# include <signal.h>
+
 # define FD_SOCKET_SERVER 0
-# define User_WAIT_LIST 10
+# define USER_WAIT_LIST 10
 # define MSG_BUFFER 512
 # define FD_LIST_NUMBER 10 //! Esto es una solución temporal creo
 # define POLL_TIMEOUT 10
@@ -29,12 +32,15 @@ private:
 	struct pollfd		_fd_list_sockets[FD_LIST_NUMBER];
 	void				welcome(const int fd_user);
 	void				check_if_user_ready();
-	void				parser_msg();
+	void				switchServerOff(void);
+	static void			signalHandler(int signal);
+	static bool			_server_on;
 
 public:
 	Server(char *port, std::string password);
 	void	insert_into_socket_list(const int fd);
-	void	swich_server_on(void);
+
+	void	switchServerOn(void);
 	~Server();
 	const 	std::string& getPassword() const;
     void 	setPassword(const std::string&);
