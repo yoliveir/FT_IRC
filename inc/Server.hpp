@@ -7,9 +7,11 @@
 # include <unistd.h>
 # include <poll.h>
 # include <stdlib.h>
-#include "../src/Commands/CommandManager.hpp"
+# include "../src/Commands/CommandManager.hpp"
 # include <cstring>
 # include <stdio.h>
+# include "../src/Channel.hpp"
+# include <map>
 # define FD_SOCKET_SERVER 0
 # define User_WAIT_LIST 10
 # define MSG_BUFFER 512
@@ -20,6 +22,7 @@ class Server
 {
 private:
 //	CommandManager 		_commandManager; Lo he quitado de aquí y está dentro de Parser::parseMsg();
+	std::map<std::string, Channel*> _channels;
 	const std::string	_password;
 	const int			_server_fd_socket;
 	struct sockaddr_in	_address; // direcion socket INternet
@@ -33,13 +36,15 @@ private:
 
 public:
 	Server(char *port, std::string password);
-	void	insert_into_socket_list(const int fd);
-	void	swich_server_on(void);
+	void		insert_into_socket_list(const int fd);
+	void		swich_server_on(void);
 	~Server();
-	const 	std::string& getPassword() const;
-    void 	setPassword(const std::string&);
-	const 	std::string extract_cmd() const; //el buffer puede que es algo del usere!
-	void	disconect_user(int fd, int index);
+	Channel*	getChannel(const std::string& name);
+	Channel*	createChannel(const std::string& name);
+	const 		std::string& getPassword() const;
+    void 		setPassword(const std::string&);
+	const 		std::string extract_cmd() const; //el buffer puede que es algo del usere!
+	void		disconect_user(int fd, int index);
 };
 
 /*

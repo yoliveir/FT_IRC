@@ -99,3 +99,18 @@ void	Server::swich_server_on(void)
 		check_if_user_ready();
 	}
 }
+
+Channel* Server::getChannel(const std::string& name)
+{
+	std::map<std::string, Channel*>::iterator it = _channels.find(name);
+	if (it == _channels.end())
+		return NULL;
+	return it->second;
+}
+
+Channel* Server::createChannel(const std::string& name)
+{
+	Channel* channel = new Channel(name);
+	_channels.insert(std::make_pair(name, channel));
+	return channel;
+}
