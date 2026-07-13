@@ -9,7 +9,7 @@ vamo a empezar: a
 	En "CommandManager" voy crear la Logica de cada comando para que solo tengan que llamar a una clase. EJ:"manager.Pass(Server, User, Args).
 	Ahora tenemos al "CommandManager" que recibe el nombre del comando (como PASS o JOIN), busca la clase y llama exec, asi el Server no necesita un 			switch 	gigante con todos los comandos y cada uno tiene su propia logica en cada clase.
 	.
-	Añandi Channel(cpp y hpp) y cambie un poco a Server para añandir a create server y una busqueda de Users.
+	**Añandi Channel(cpp y hpp) y cambie un poco a Server para añandir a create server y una busqueda de Users.**
 }
 
 **PAOLO y YOLANDA:**
