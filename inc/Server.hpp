@@ -12,6 +12,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <signal.h>
+# include "Channel.hpp"
 
 # define FD_SOCKET_SERVER 0
 # define USER_WAIT_LIST 10
@@ -22,7 +23,6 @@
 class Server
 {
 private:
-//	CommandManager 		_commandManager; Lo he quitado de aquí y está dentro de Parser::parseMsg();
 	std::map<std::string, Channel*> _channels;
 	const std::string	_password;
 	const int			_server_fd_socket;
@@ -46,7 +46,7 @@ public:
 	Channel*	getChannel(const std::string& name);
 	Channel*	createChannel(const std::string& name);
 	const 		std::string& getPassword() const;
-    void 		setPassword(const std::string&);
+    void 		setPassword(const std::string&); // yo diría que esta no es necesaria.
 	const 		std::string extract_cmd() const; //el buffer puede que es algo del usere!
 	void		disconect_user(int fd, int index);
 };

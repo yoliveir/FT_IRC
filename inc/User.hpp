@@ -22,21 +22,24 @@ private:
 public:
 
 	User(int fd);
+	User(User const &user);
+	User	&operator=(User const &user);
+	~User(void);
 
 	int		get_fd_socket() const;
 	static User	&getUser(int fd);
 
-	// bool isAuthenticated() const;
-	// void setAuthenticated(bool);
+	bool isAuthenticated() const;
+	void setAuthenticated(bool);
 
-	// bool isRegistered() const;
-	// void setRegistered(bool);
+	bool isRegistered() const;
+	void setRegistered(bool);
 
-	// const std::string& getNickname() const;
-	// void setNickname(const std::string&);
+	const std::string& getNickname() const;
+	void setNickname(const std::string&);
 
 	const std::string& getUsername() const;
-	// void setUsername(const std::string&);
+	void setUsername(const std::string&);
 
 	// void sendMessage(const std::string&);
 };

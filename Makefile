@@ -12,7 +12,8 @@ CXXFLAGS += -std=c++98
 RM = rm -rf
 
 SRCS = $(SRC_DIR)main.cpp $(SRC_DIR)Server.cpp $(SRC_DIR)User.cpp \
-		$(SRC_DIR)Parser/Parser.cpp $(SRC_DIR)Commands/CommandManager.cpp $(SRC_DIR)Commands/Pass.cpp $(SRC_DIR)Commands/Nick.cpp
+		$(SRC_DIR)Parser/Parser.cpp $(SRC_DIR)Commands/CommandManager.cpp $(SRC_DIR)Commands/Pass.cpp $(SRC_DIR)Commands/Nick.cpp \
+		$(SRC_DIR)Channel.cpp
 
 OBJS = $(patsubst $(SRC_DIR)%.cpp, $(OBJS_DIR)%.o, $(SRCS))
 

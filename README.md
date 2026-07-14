@@ -18,3 +18,8 @@ vamo a empezar: a
 	de la linea hasta que se encuentra el caracter ':', y luego el último argumento todo lo que haya tras este ':' (incluido).
 	Y hemos añadido en User un map estático para la función getUser a partir del fd.
 }
+
+**YOLANDA:**
+{
+	He arreglado el problema que daba el mapa de usuarios dentro de User, lo malo es que requiere memoria dinámica, lo bueno es que ya lo he gestionado para que se libere todo bien (creo). Mañana habría que revisar el parseo y eliminar el salto de línea final de los comandos además de comprobar que termine por \r\n en vez de solo \n.
+}

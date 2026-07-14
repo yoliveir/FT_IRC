@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yurolive <yurolive@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anfi <anfi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/10 12:24:24 by yurolive          #+#    #+#             */
-/*   Updated: 2026/07/13 15:44:20 by yurolive         ###   ########.fr       */
+/*   Updated: 2026/07/14 20:12:33 by anfi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ void Channel::broadcast(const std::string& message, int excludeFd)
 	std::map<int, User*>::iterator it;
 	for (it = _members.begin(); it != _members.end(); ++it)
 	{
-		if (it->first != excludeFd)
-			it->second->sendMessage(message);
+		// if (it->first != excludeFd)
+			// it->second->sendMessage(message);
 	}
 }
 

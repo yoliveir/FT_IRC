@@ -61,7 +61,8 @@ void	Server::disconect_user(int fd, int index)
 	if (index != _n_socket_used - 1)
 		_fd_list_sockets[index] = _fd_list_sockets[_n_socket_used - 1];
 	--_n_socket_used;
-	std::cout << "user " << User::getUser(fd).getUsername() << "(" << fd<< ") desconectado\n";
+	std::cout << "user " << User::getUser(fd).getNickname() << "(" << fd<< ") desconectado\n";
+	delete (&User::getUser(fd));
 }
 
 void	Server::check_if_user_ready()
@@ -93,12 +94,13 @@ void	Server::check_if_user_ready()
 void	Server::switchServerOff(void)
 {
 	std::cout << "Hasta luego maricarmen\n";
+	const int	clients_connected = _n_socket_used;
 
 	close(_server_fd_socket);
-	for (int i = 0; i < _n_socket_used; ++i)
+	for (int i = 1; i < clients_connected; ++i)
 	{
+		disconect_user(_fd_list_sockets[i].fd, i);
 		send(_fd_list_sockets[i].fd, "Server close conection.\n", 24, 0);
-		close(_fd_list_sockets[i].fd);
 	}
 }
 
@@ -122,9 +124,9 @@ void	Server::switchServerOn(void)
 		
 		if (_fd_list_sockets[FD_SOCKET_SERVER].revents == POLLIN)
 		{
-			User	user(accept(_server_fd_socket, NULL, NULL));
-			insert_into_socket_list(user.get_fd_socket());
-			welcome(user.get_fd_socket());
+			User	*user = new User(accept(_server_fd_socket, NULL, NULL));
+			insert_into_socket_list(user->get_fd_socket());
+			welcome(user->get_fd_socket());
 		}
 		check_if_user_ready();
 	}
@@ -143,4 +145,9 @@ Channel* Server::createChannel(const std::string& name)
 	Channel* channel = new Channel(name);
 	_channels.insert(std::make_pair(name, channel));
 	return channel;
+}
+
+const std::string	&Server::getPassword() const
+{
+	return (_password);
 }
