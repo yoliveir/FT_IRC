@@ -28,10 +28,10 @@ void Parser::splitArgs(std::string	&str_to_spl, std::vector<std::string>	&args) 
 		args.push_back(str_to_spl); // encasqueta ultimo argumento
 	}
 
-	for (int i  = 0; i < args.size(); i++)
-	{
-		std::cout << args.at(i) << "[" << i << "]" << "\n";
-	}
+	// for (int i  = 0; i < args.size(); i++)
+	// {
+	// 	std::cout << args.at(i) << "[" << i << "]" << "\n";
+	// }
 }
 
 std::vector<std::string>	Parser::extractArgs(const std::string &raw_msg) const

@@ -21,3 +21,8 @@ User	&User::getUser(int fd)
 {
 	return (*_map_fd_user[fd]); //de essta manera devolvemos value del mapa en el corespondete fd
 }
+
+const	std::string& User::getUsername() const
+{
+	return (_nickname);
+}

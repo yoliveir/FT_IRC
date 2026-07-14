@@ -35,7 +35,7 @@ public:
 	// const std::string& getNickname() const;
 	// void setNickname(const std::string&);
 
-	// const std::string& getUsername() const;
+	const std::string& getUsername() const;
 	// void setUsername(const std::string&);
 
 	// void sendMessage(const std::string&);
