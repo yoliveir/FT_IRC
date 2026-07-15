@@ -52,7 +52,7 @@ void	User::setNickname(const std::string &nickname)
 	_nickname = nickname;
 }
 
-const	std::string	&User::getUsername(void) const
+const std::string	&User::getUsername(void) const
 {
 	return (_username);
 }
@@ -80,6 +80,3 @@ void	User::setRegistered(bool registered)
 {
 	_registered = registered;
 }
-
-
-

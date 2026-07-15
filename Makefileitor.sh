@@ -40,45 +40,55 @@ fi
 
 #------------- -   MAKEFILE CREATION CODE   - -----------------------------
 
-echo -e "NAME = $name\n" > $file
+cat << EOF > $file
+NAME = $name
 
-echo -e "INC_DIR = ./inc" >> $file
-echo -e "SRC_DIR = ./src/" >> $file
-echo -e "OBJS_DIR = ./objs/\n" >> $file
+SRC_DIR = ./src/
+OBJS_DIR = ./objs/
 
-echo -e "CPP = c++" >> $file
-echo -e 'CPPFLAGS =	-I$(INC_DIR) -Wextra -Wall -Werror' >> $file
-echo -e 'CPPFLAGS += -fsanitize=address' >> $file
-echo -e "CPPFLAGS += -std=c++98\n" >> $file
+INC_DIRS = \$(sort \$(dir \$(SRCS)))
+SRC_DIRS = \$(INC_DIRS)
 
-echo -e "RM = rm -rf\n" >> $file
+VPATH += \$(SRC_DIRS)
 
-echo -e "SRCS = ` ls $path/src | grep .cpp | sed 's/^/$(SRC_DIR)/g'| tr '\n' ' '`\n" >> $file
-echo -e 'OBJS = $(patsubst $(SRC_DIR)%.cpp, $(OBJS_DIR)%.o, $(SRCS))\n' >> $file
-echo 'GREEN = \033[0;32m
+CPP = c++
+
+CPPFLAGS += \$(addprefix -I, \$(INC_DIRS))
+CPPFLAGS += -Wextra -Wall -Werror
+CPPFLAGS += -fsanitize=address
+CPPFLAGS += -std=c++98
+
+RM = rm -rf
+
+SRCS = $(find $path -name "*.cpp" | sed 's|^\./src/|$(SRC_DIR)|' | awk 'NR==1{printf "%s", $0; next} {printf " \\\n\t%s", $0}')
+
+OBJS = \$(addprefix \$(OBJS_DIR), \$(notdir \$(SRCS:.cpp=.o)))
+
+GREEN = \033[0;32m
 GRAY = \033[0;90m
-STD = \033[0m' >> $file
-echo -e "\n.PHONY: clean all fclean re\n" >> $file
+STD = \033[0m
 
-#------- Compilation part --------------------
-echo -e 'all: $(NAME)\n' >> $file
+.PHONY: clean all fclean re
 
-echo -e '$(NAME): $(OBJS)' >> $file
-echo -e '	$(CPP) $(CPPFLAGS) $(OBJS) -o $(NAME)' >> $file
-echo -e '	@echo "\\n$(GREEN)Compilation finished.$(STD)"\n' >> $file
+all: \$(NAME)
 
-echo -e '$(OBJS_DIR)%.o: $(SRC_DIR)%.cpp' >> $file
-echo -e '	@echo "$(GRAY)Compiling file  →   $< $(STD)"' >> $file
-echo -e '	@mkdir -p $(OBJS_DIR)' >> $file
-echo -e '	$(CPP) -c -MMD $(CPPFLAGS) -o $@ $<\n' >> $file
+\$(NAME): \$(OBJS)
+	\$(CPP) \$(CPPFLAGS) \$(OBJS) -o \$(NAME)
+	@echo "\n\$(GREEN)Compilation finished.\$(STD)"
 
-echo -e 'clean:' >> $file
-echo -e '	@$(RM) objs\n' >> $file
+\$(OBJS_DIR)%.o: %.cpp
+	@echo "\$(GRAY)Compiling file  →   \$< \$(STD)"
+	@mkdir -p \$(OBJS_DIR)
+	\$(CPP) -c -MMD \$(CPPFLAGS) -o \$@ \$<
 
-echo -e 'fclean: clean' >> $file
-echo -e '	@rm $(NAME)\n' >> $file
+clean:
+	@\$(RM) objs
 
-echo -e 're: fclean all\n' >> $file
+fclean: clean
+	@rm \$(NAME)
 
-echo -e '-include $(OBJS_DIR)/*.d' >> $file
-#--------------------------------------------------------------------------
+re: fclean all
+
+-include \$(OBJS_DIR)/*.d
+
+EOF

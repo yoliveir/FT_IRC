@@ -35,6 +35,7 @@ private:
 	void				check_if_user_ready();
 	void				switchServerOff(void);
 	static void			signalHandler(int signal);
+	void				handleMessage(int socket_index);
 	static bool			_server_on;
 
 public:

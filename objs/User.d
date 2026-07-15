@@ -1,1 +1,1 @@
-objs/User.o: src/User.cpp inc/User.hpp
+objs/User.o: src/User/User.cpp src/User/User.hpp

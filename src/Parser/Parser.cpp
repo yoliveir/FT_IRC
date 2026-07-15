@@ -1,6 +1,7 @@
 #include "Parser.hpp"
+#include "ReturnCodes.hpp"
 
-void Parser::splitArgs(std::string	&str_to_spl, std::vector<std::string>	&args) const
+void Parser::splitArgs(std::string &str_to_spl, string_vector &args) const
 {
 	int space_is_here = str_to_spl.find(SPACE);
 
@@ -24,7 +25,6 @@ void Parser::splitArgs(std::string	&str_to_spl, std::vector<std::string>	&args) 
 
 			str_to_spl = str_to_spl.substr(space_is_here); // salta otro arguumento
 		}
-
 		args.push_back(str_to_spl); // encasqueta ultimo argumento
 	}
 
@@ -34,13 +34,14 @@ void Parser::splitArgs(std::string	&str_to_spl, std::vector<std::string>	&args) 
 	// }
 }
 
-std::vector<std::string>	Parser::extractArgs(const std::string &raw_msg) const
+string_vector	Parser::extractArgs(const std::string &raw_msg) const
 {
-	std::vector<std::string>	args;
+	string_vector	args;
 	std::string					pre_dots_string;
 	std::string					post_dots_string;
 
 	int	dots_index = raw_msg.find(SPACE":"); //INDEX DOS PUNTOS
+	int	new_line_index; // INDEX DEL "\r\n"
 
 	if (dots_index != -1)
 	{
@@ -60,36 +61,48 @@ std::vector<std::string>	Parser::extractArgs(const std::string &raw_msg) const
 	return (args);
 }
 
-bool Parser::cmdExist(const std::vector <std::string> &args)
+void	Parser::printMsg(string_vector &args, int origin_fd) const
 {
-	const std::string string_array[CMDS_QUANTITY] =
+	std::cout << "User [" << origin_fd << "] sent [";
+	for (int i = 0; i < args.size(); ++i)
 	{
-		"PASS",
-		"NICK",
-		"USER",
-		"JOIN",
-		"PRIVMSG",
-		"KICK",
-		"INVITE",
-		"TOPIC",
-		"MODE",
-		"QUIT"
-	};
-
-	for (int i = 0; i < CMDS_QUANTITY; ++i)
-	{
-		if (args.at(0) == string_array[i])
-			return (true);
+		std::cout << args[i];
+		if (i == args.size() - 1)
+			std::cout << "]\n";
+		else
+			std::cout << " ";
 	}
-	return (false);
 }
 
+string_vector splitCmd(std::string raw_msg)
+{
+	string_vector	cmds;
+	std::string		aux;
+
+	while (raw_msg[0])
+	{
+		int find_char = raw_msg.find("\r\n");
+		aux = raw_msg.substr(0, find_char);
+		if (find_char == -1 || aux.find("\n") != -1)
+			throw ReturnCodes::BadFormatting();
+		cmds.push_back(aux);
+
+		raw_msg = raw_msg.substr(find_char + 2);
+	}
+
+	return  (cmds);
+}
 
 void	Parser::parseMsg(std::string raw_msg, int origin_fd, Server &server)
 {
-	std::vector	<std::string>	args = extractArgs(raw_msg);
+	string_vector	cmds = splitCmd(raw_msg);
 
-	CommandManager	commandManager;
-	commandManager.execute(server, User::getUser(origin_fd), args);
+	for (int i = 0; i < cmds.size(); ++i)
+	{
+		string_vector	args = extractArgs(cmds[i]);
+		printMsg(args, origin_fd);
 
+		CommandManager	commandManager;
+		commandManager.execute(server, User::getUser(origin_fd), args);
+	}
 }

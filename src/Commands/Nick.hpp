@@ -8,5 +8,5 @@ public:
 	Nick();
 	~Nick();
 
-	int execute(Server &server, User &user, const std::vector<std::string> &args);
+	int execute(Server &server, User &user, const string_vector &args);
 };

@@ -1,1 +1,2 @@
-objs/Channel.o: src/Channel.cpp inc/Channel.hpp inc/User.hpp
+objs/Channel.o: src/Channel/Channel.cpp src/Channel/Channel.hpp \
+  src/User/User.hpp

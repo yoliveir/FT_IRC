@@ -10,5 +10,5 @@ public:
 
 	int execute(Server& server,
 				User& user,
-				const std::vector<std::string>& args);
+				const string_vector& args);
 };

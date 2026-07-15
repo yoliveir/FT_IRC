@@ -6,7 +6,7 @@ Nick::~Nick() {}
 
 int Nick::execute(Server& server,
 						 User& User,
-						 const std::vector<std::string>& args)
+						 const string_vector& args)
 {
 	(void)server;
 	(void)User;

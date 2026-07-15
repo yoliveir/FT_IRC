@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+typedef std::vector<std::string> string_vector;
+
 class ACommand;
 class Server;
 class User;
@@ -18,5 +20,5 @@ public:
 	CommandManager();
 	~CommandManager();
 
-	void execute(Server &server, User &user, const std::vector<std::string> &command);
+	void execute(Server &server, User &user, const string_vector &command);
 };

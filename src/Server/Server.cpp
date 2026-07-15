@@ -1,11 +1,10 @@
 #include "Server.hpp"
 #include "User.hpp"
-#include "./Parser/Parser.hpp"
+#include "Parser.hpp"
 
 bool	Server::_server_on = true;
 
-Server::Server(char *port, std::string password) :
-													_password(password),
+Server::Server(char *port, std::string password) :	_password(password),
 													_server_fd_socket(socket(AF_INET, SOCK_STREAM, 0)),
 													_n_socket_used(0)
 {
@@ -13,7 +12,7 @@ Server::Server(char *port, std::string password) :
 	_address.sin_addr.s_addr = INADDR_ANY;  // por cual interfaz nos podemos conectar
 	_address.sin_port = htons(std::atoi(port));
 
-	//bind es unir: el socket con adress ip
+	// bind significa unir: el socket con adress ip
 	if (bind(_server_fd_socket, (const struct sockaddr *)&_address, sizeof(sockaddr_in)) == -1)
 	{
 		std::cout << "COULD NOT BIND...\n";
@@ -46,7 +45,6 @@ void	Server::insert_into_socket_list(const int fd_socket)
 
 }
 
-
 #include <sys/time.h>
 // extern ssize_t send (int __fd, const void *__buf, size_t __n, int __flags);
 void Server::welcome(int fd_user)
@@ -65,33 +63,46 @@ void	Server::disconect_user(int fd, int index)
 	delete (&User::getUser(fd));
 }
 
+void	Server::handleMessage(int socket_index)
+{
+	int			recv_result;
+	Parser		parser;
+
+	recv_result = recv(_fd_list_sockets[socket_index].fd, _msg_buffer, MSG_BUFFER, 0);
+	if(recv_result == 0)
+	{
+		disconect_user(_fd_list_sockets[socket_index].fd, socket_index);
+	}
+	else if (recv_result > 0)
+	{
+		parser.parseMsg(std::string((char *)_msg_buffer), _fd_list_sockets[socket_index].fd, *this);
+		memset(_msg_buffer, '\0', MSG_BUFFER);
+	}
+}
+
 void	Server::check_if_user_ready()
 {
-	int			error_code;
-	int			recv_result;
-	socklen_t	error_code_size = sizeof(int);
-	Parser		parser;
 
 	for (int i = 1; i < _n_socket_used; i++)
 	{
 		if (_fd_list_sockets[i].revents == POLLIN)
 		{
-			recv_result = recv(_fd_list_sockets[i].fd, _msg_buffer, MSG_BUFFER, 0);
-			if(recv_result == 0)
+			try
 			{
-				disconect_user(_fd_list_sockets[i].fd, i);
+				handleMessage(i);
 			}
-			else if (recv_result > 0)
+			catch(const std::exception& e)
 			{
-				std::cout << "User (fd: " << _fd_list_sockets[i].fd << ") sent [" << _msg_buffer << "]\n";
-				parser.parseMsg(std::string((char *)_msg_buffer), _fd_list_sockets[i].fd, *this);
-				memset(_msg_buffer, '\0', MSG_BUFFER);
+				std::string msg = e.what();
+				msg += "\n";
+				std::cerr << msg;
+				send(_fd_list_sockets[i].fd, msg.c_str(), msg.size(), 0);
 			}
 		}
 	}
 }
 
-void	Server::switchServerOff(void)
+void	Server::switchServerOff(void) //? Poner quizás esto en el destructor
 {
 	std::cout << "Hasta luego maricarmen\n";
 	const int	clients_connected = _n_socket_used;
@@ -99,8 +110,8 @@ void	Server::switchServerOff(void)
 	close(_server_fd_socket);
 	for (int i = 1; i < clients_connected; ++i)
 	{
+		send(_fd_list_sockets[i].fd, "Server close connection.\n", 25, 0);
 		disconect_user(_fd_list_sockets[i].fd, i);
-		send(_fd_list_sockets[i].fd, "Server close conection.\n", 24, 0);
 	}
 }
 
@@ -110,9 +121,12 @@ void	Server::signalHandler(int signal)
 	_server_on = false;
 }
 
+/*  */
+
 void	Server::switchServerOn(void)
 {
 	signal(SIGINT, signalHandler);
+
 	while (true)
 	{
 		if (_server_on == false)
@@ -120,7 +134,8 @@ void	Server::switchServerOn(void)
 			switchServerOff();
 			return ;
 		}
-		int read_pending_count = poll(_fd_list_sockets, _n_socket_used, POLL_TIMEOUT);
+		poll(_fd_list_sockets, _n_socket_used, POLL_TIMEOUT);
+		//int read_pending_count = poll(_fd_list_sockets, _n_socket_used, POLL_TIMEOUT); Es necesario ese read_pending_count???
 		
 		if (_fd_list_sockets[FD_SOCKET_SERVER].revents == POLLIN)
 		{
@@ -128,7 +143,7 @@ void	Server::switchServerOn(void)
 			insert_into_socket_list(user->get_fd_socket());
 			welcome(user->get_fd_socket());
 		}
-		check_if_user_ready();
+		check_if_user_ready(); //controla si el uario esta listo para escrivir
 	}
 }
 

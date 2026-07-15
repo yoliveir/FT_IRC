@@ -1,4 +1,4 @@
-#include "User.hpp"
+#include "UserCommand.hpp"
 
 UserCommand::UserCommand() {}
 
@@ -6,7 +6,7 @@ UserCommand::~UserCommand() {}
 
 int UserCommand::execute(Server& server,
 						 User& user,
-						 const std::vector<std::string>& args)
+						 const string_vector& args)
 {
 	(void)server;
 	(void)user;

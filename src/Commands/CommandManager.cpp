@@ -23,21 +23,22 @@ CommandManager::CommandManager()
 	// _commands["MODE"] = new Mode();
 }
 
+typedef std::map<std::string, ACommand*>::iterator iteradorComando;
 CommandManager::~CommandManager()
 {
-	for (std::map<std::string, ACommand*>::iterator it = _commands.begin();
+	for (iteradorComando it = _commands.begin();
 		it != _commands.end(); ++it)
 		delete it->second;
 }
 
 // en un futuro tambien debera recivir channel
-void CommandManager::execute(Server &server, User &user, const std::vector<std::string> &args) //hemos camb iado comands con args y en veez de ser un string es vector entero
+void CommandManager::execute(Server &server, User &user, const string_vector &args) //hemos cambiado comands con args y en vez de ser un string es vector entero
 {
-	std::map<std::string, ACommand*>::iterator it = _commands.find(args.at(0));
+	iteradorComando it = _commands.find(args[0]);
 
 	if (it == _commands.end())
 	{
-		std::cerr << "Unknown command\n";
+		std::cerr << "Unknown command\n"; //! Falta avisar al user
 		return ;
 	}
 

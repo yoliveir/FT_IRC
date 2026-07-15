@@ -8,7 +8,7 @@ Pass::~Pass() {}
 
 int Pass::execute(Server &server,
 						 User &user,
-						 const std::vector<std::string> &args)
+						 const string_vector &args)
 {
 if (args.size() < 2)
 	{
