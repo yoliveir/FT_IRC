@@ -18,6 +18,10 @@ private:
 	std::string						_nickname;
 	std::string						_username;
 	std::string						_realname;
+	std::string						_msg_buffer;
+	// El mensaje se puede recibir por partes, es importante que
+	// cada usuario tenga su propio buffer mientras espera a recibir el mensaje completo!!
+	// Un sólo buffer como teníamos hasta ahora se mezclarían los mensajes
 
 public:
 
@@ -40,6 +44,10 @@ public:
 
 	const std::string& getUsername() const;
 	void setUsername(const std::string&);
+
+	void	addToBuffer(const char *buffer_received);
+	const std::string	&getBuffer(void) const;
+	void	cleanBuffer(void);
 
 	// void sendMessage(const std::string&);
 };

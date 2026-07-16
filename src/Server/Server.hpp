@@ -19,6 +19,8 @@
 # define MSG_BUFFER 512
 # define FD_LIST_NUMBER 10 //! Esto es una solución temporal creo
 # define POLL_TIMEOUT 10
+#define CR_LF "\r\n"
+#define CR_LF_NOT_FOUND -1
 
 class Server
 {
@@ -35,7 +37,7 @@ private:
 	void				check_if_user_ready();
 	void				switchServerOff(void);
 	static void			signalHandler(int signal);
-	void				handleMessage(int socket_index);
+	void				handleMessage(int socket_index, User &user);
 	static bool			_server_on;
 
 public:
@@ -47,9 +49,7 @@ public:
 	Channel*	getChannel(const std::string& name);
 	Channel*	createChannel(const std::string& name);
 	const 		std::string& getPassword() const;
-    void 		setPassword(const std::string&); // yo diría que esta no es necesaria.
-	const 		std::string extract_cmd() const; //el buffer puede que es algo del usere!
-	void		disconect_user(int fd, int index);
+	void		disconect_user(User &user, int index);
 };
 
 /*

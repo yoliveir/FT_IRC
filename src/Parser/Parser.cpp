@@ -93,16 +93,16 @@ string_vector splitCmd(std::string raw_msg)
 	return  (cmds);
 }
 
-void	Parser::parseMsg(std::string raw_msg, int origin_fd, Server &server)
+void	Parser::parseMsg(User &user, Server &server)
 {
-	string_vector	cmds = splitCmd(raw_msg);
+	string_vector	cmds = splitCmd(user.getBuffer());
 
 	for (int i = 0; i < cmds.size(); ++i)
 	{
 		string_vector	args = extractArgs(cmds[i]);
-		printMsg(args, origin_fd);
+		printMsg(args, user.get_fd_socket());
 
 		CommandManager	commandManager;
-		commandManager.execute(server, User::getUser(origin_fd), args);
+		commandManager.execute(server, user, args);
 	}
 }

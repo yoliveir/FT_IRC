@@ -80,3 +80,18 @@ void	User::setRegistered(bool registered)
 {
 	_registered = registered;
 }
+
+void	User::addToBuffer(const char *buffer_received)
+{
+	_msg_buffer.append(buffer_received);
+}
+
+const std::string	&User::getBuffer(void) const
+{
+	return (_msg_buffer);
+}
+
+void	User::cleanBuffer(void)
+{
+	_msg_buffer.clear();
+}

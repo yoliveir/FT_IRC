@@ -8,6 +8,14 @@ Server::Server(char *port, std::string password) :	_password(password),
 													_server_fd_socket(socket(AF_INET, SOCK_STREAM, 0)),
 													_n_socket_used(0)
 {
+	int	reuseaddr_value = true;
+
+	if (setsockopt(_server_fd_socket, SOL_SOCKET, SO_REUSEADDR, &reuseaddr_value, sizeof(int)))
+	{
+		std::cout << "SETSOCKOPT FAILED...\n";
+		exit(-1);
+	}
+
 	_address.sin_family = AF_INET; //familia de protocolo: ipv4 por ejemplo
 	_address.sin_addr.s_addr = INADDR_ANY;  // por cual interfaz nos podemos conectar
 	_address.sin_port = htons(std::atoi(port));
@@ -53,30 +61,33 @@ void Server::welcome(int fd_user)
 
 }
 
-void	Server::disconect_user(int fd, int index)
+void	Server::disconect_user(User &user, int index)
 {
-	close(fd);
+	close(user.get_fd_socket());
 	if (index != _n_socket_used - 1)
 		_fd_list_sockets[index] = _fd_list_sockets[_n_socket_used - 1];
 	--_n_socket_used;
-	std::cout << "user " << User::getUser(fd).getNickname() << "(" << fd<< ") desconectado\n";
-	delete (&User::getUser(fd));
+	std::cout << "user " << user.getNickname() << "[" << user.get_fd_socket() << "] desconectado\n";
+	delete (&user);
 }
 
-void	Server::handleMessage(int socket_index)
+void	Server::handleMessage(int socket_index, User &user)
 {
 	int			recv_result;
 	Parser		parser;
 
 	recv_result = recv(_fd_list_sockets[socket_index].fd, _msg_buffer, MSG_BUFFER, 0);
+	user.addToBuffer((char *)_msg_buffer);
+	memset(_msg_buffer, '\0', MSG_BUFFER);
+
 	if(recv_result == 0)
+		disconect_user(user, socket_index);
+	else if (user.getBuffer().find(CR_LF) == CR_LF_NOT_FOUND)
+		return ;
+	else
 	{
-		disconect_user(_fd_list_sockets[socket_index].fd, socket_index);
-	}
-	else if (recv_result > 0)
-	{
-		parser.parseMsg(std::string((char *)_msg_buffer), _fd_list_sockets[socket_index].fd, *this);
-		memset(_msg_buffer, '\0', MSG_BUFFER);
+		parser.parseMsg(user, *this);
+		user.cleanBuffer();
 	}
 }
 
@@ -89,7 +100,7 @@ void	Server::check_if_user_ready()
 		{
 			try
 			{
-				handleMessage(i);
+				handleMessage(i, User::getUser(_fd_list_sockets[i].fd));
 			}
 			catch(const std::exception& e)
 			{
@@ -111,7 +122,8 @@ void	Server::switchServerOff(void) //? Poner quizás esto en el destructor
 	for (int i = 1; i < clients_connected; ++i)
 	{
 		send(_fd_list_sockets[i].fd, "Server close connection.\n", 25, 0);
-		disconect_user(_fd_list_sockets[i].fd, i);
+		User &user = User::getUser(_fd_list_sockets[i].fd);
+		disconect_user(user, i);
 	}
 }
 
