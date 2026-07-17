@@ -54,13 +54,14 @@ VPATH += \$(SRC_DIRS)
 CPP = c++
 
 CPPFLAGS += \$(addprefix -I, \$(INC_DIRS))
-CPPFLAGS += -Wextra -Wall -Werror
+
+//CPPFLAGS += -Wextra -Wall -Werror
 CPPFLAGS += -fsanitize=address
 CPPFLAGS += -std=c++98
 
 RM = rm -rf
 
-SRCS = $(find $path -name "*.cpp" | sed 's|^\./src/|$(SRC_DIR)|' | awk 'NR==1{printf "%s", $0; next} {printf " \\\n\t%s", $0}')
+SRCS = $(find $path/src/ -name "*.cpp" | sed 's|^\./src/|$(SRC_DIR)|' | awk 'NR==1{printf "%s", $0; next} {printf " \\\n\t%s", $0}')
 
 OBJS = \$(addprefix \$(OBJS_DIR), \$(notdir \$(SRCS:.cpp=.o)))
 

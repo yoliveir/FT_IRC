@@ -11,7 +11,8 @@ VPATH += $(SRC_DIRS)
 CPP = c++
 
 CPPFLAGS += $(addprefix -I, $(INC_DIRS))
-CPPFLAGS += #-Wextra -Wall -Werror
+
+//CPPFLAGS += -Wextra -Wall -Werror
 CPPFLAGS += -fsanitize=address
 CPPFLAGS += -std=c++98
 

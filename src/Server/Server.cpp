@@ -111,7 +111,7 @@ void	Server::check_if_user_ready()
 	}
 }
 
-void	Server::switchServerOff(void) //? Poner quizás esto en el destructor
+void	Server::switchServerOff(void)
 {
 	std::cout << "Hasta luego maricarmen\n";
 	const int	clients_connected = _n_socket_used;
@@ -138,14 +138,13 @@ void	Server::switchServerOn(void)
 		}
 		poll(_fd_list_sockets, _n_socket_used, POLL_TIMEOUT);
 		//int read_pending_count = poll(_fd_list_sockets, _n_socket_used, POLL_TIMEOUT); Es necesario ese read_pending_count???
-		
 		if (_fd_list_sockets[FD_SOCKET_SERVER].revents == POLLIN)
 		{
 			User	*user = new User(accept(_server_fd_socket, NULL, NULL));
 			insert_into_socket_list(user->get_fd_socket());
 			welcome(user->get_fd_socket());
 		}
-		check_if_user_ready(); //controla si el uario esta listo para escrivir
+		check_if_user_ready(); //controla si el usario esta listo para escribir
 	}
 }
 
