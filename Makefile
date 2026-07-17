@@ -11,30 +11,31 @@ VPATH += $(SRC_DIRS)
 CPP = c++
 
 CPPFLAGS += $(addprefix -I, $(INC_DIRS))
-#CPPFLAGS += -Wextra -Wall -Werror
+CPPFLAGS += #-Wextra -Wall -Werror
 CPPFLAGS += -fsanitize=address
 CPPFLAGS += -std=c++98
 
 RM = rm -rf
 
-SRCS = $(SRC_DIR)Commands/ACommand.cpp \
-	$(SRC_DIR)Commands/Mode.cpp \
-	$(SRC_DIR)Commands/Quit.cpp \
-	$(SRC_DIR)Commands/UserCommand.cpp \
-	$(SRC_DIR)Commands/CommandManager.cpp \
-	$(SRC_DIR)Commands/Invite.cpp \
-	$(SRC_DIR)Commands/Join.cpp \
-	$(SRC_DIR)Commands/Kick.cpp \
-	$(SRC_DIR)Commands/Nick.cpp \
+SRCS = $(SRC_DIR)Commands/Quit.cpp \
 	$(SRC_DIR)Commands/Pass.cpp \
+	$(SRC_DIR)Commands/Join.cpp \
+	$(SRC_DIR)Commands/ACommand.cpp \
 	$(SRC_DIR)Commands/PrivMsg.cpp \
+	$(SRC_DIR)Commands/CommandManager.cpp \
+	$(SRC_DIR)Commands/Mode.cpp \
+	$(SRC_DIR)Commands/Invite.cpp \
+	$(SRC_DIR)Commands/UserCommand.cpp \
+	$(SRC_DIR)Commands/Kick.cpp \
 	$(SRC_DIR)Commands/Topic.cpp \
+	$(SRC_DIR)Commands/Nick.cpp \
 	$(SRC_DIR)Channel/Channel.cpp \
 	$(SRC_DIR)Server/Server.cpp \
+	$(SRC_DIR)signal/signal.cpp \
 	$(SRC_DIR)User/User.cpp \
-	$(SRC_DIR)Parser/Parser.cpp \
+	$(SRC_DIR)ReturnCodes/ReturnCodes.cpp \
 	$(SRC_DIR)main.cpp \
-	$(SRC_DIR)ReturnCodes/ReturnCodes.cpp
+	$(SRC_DIR)Parser/Parser.cpp
 
 OBJS = $(addprefix $(OBJS_DIR), $(notdir $(SRCS:.cpp=.o)))
 

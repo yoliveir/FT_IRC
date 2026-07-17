@@ -7,12 +7,14 @@
 # include <unistd.h>
 # include <poll.h>
 # include <stdlib.h>
-# include "../src/Commands/CommandManager.hpp"
 # include <cstring>
 # include <stdio.h>
 # include <fcntl.h>
 # include <signal.h>
+
+# include "CommandManager.hpp"
 # include "Channel.hpp"
+# include "signal.hpp"
 
 # define FD_SOCKET_SERVER 0
 # define USER_WAIT_LIST 10
@@ -36,9 +38,7 @@ private:
 	void				welcome(const int fd_user);
 	void				check_if_user_ready();
 	void				switchServerOff(void);
-	static void			signalHandler(int signal);
 	void				handleMessage(int socket_index, User &user);
-	static bool			_server_on;
 
 public:
 	Server(char *port, std::string password);

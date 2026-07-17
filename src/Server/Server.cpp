@@ -2,8 +2,6 @@
 #include "User.hpp"
 #include "Parser.hpp"
 
-bool	Server::_server_on = true;
-
 Server::Server(char *port, std::string password) :	_password(password),
 													_server_fd_socket(socket(AF_INET, SOCK_STREAM, 0)),
 													_n_socket_used(0)
@@ -127,21 +125,13 @@ void	Server::switchServerOff(void) //? Poner quizás esto en el destructor
 	}
 }
 
-void	Server::signalHandler(int signal)
-{
-	(void) signal;
-	_server_on = false;
-}
-
-/*  */
-
 void	Server::switchServerOn(void)
 {
 	signal(SIGINT, signalHandler);
 
 	while (true)
 	{
-		if (_server_on == false)
+		if (g_signal == SIGINT)
 		{
 			switchServerOff();
 			return ;
