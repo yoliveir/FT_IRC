@@ -41,22 +41,20 @@ void	Server::insert_into_socket_list(const int fd_socket)
 {
 	if (fd_socket == -1)
 	{
-		perror("aaaaaaaaaaaah: "); 
+		perror("aaaaaaaaaaaah: ");
 		exit(1);
 	}
 	_fd_list_sockets[_n_socket_used].fd = fd_socket;
 	_fd_list_sockets[_n_socket_used].events = POLLIN;
 	fcntl(fd_socket, F_SETFL, O_NONBLOCK);
 	++_n_socket_used;
-
 }
 
 #include <sys/time.h>
 // extern ssize_t send (int __fd, const void *__buf, size_t __n, int __flags);
-void Server::welcome(int fd_user)
+void Server::welcome(const int fd_user)
 {
-	send(fd_user, "BiEnVeNiD@\n", 11, 0);
-
+	send(fd_user, "BiEnVeNiD@\nHELP para ayuda\n", 11, 0);
 }
 
 void	Server::disconect_user(User &user, int index)
@@ -140,7 +138,7 @@ void	Server::switchServerOn(void)
 		//int read_pending_count = poll(_fd_list_sockets, _n_socket_used, POLL_TIMEOUT); Es necesario ese read_pending_count???
 		if (_fd_list_sockets[FD_SOCKET_SERVER].revents == POLLIN)
 		{
-			User	*user = new User(accept(_server_fd_socket, NULL, NULL));
+			User	*user = new User(accept(_server_fd_socket, NULL, NULL)); //tenemos que proteget si ahy error?
 			insert_into_socket_list(user->get_fd_socket());
 			welcome(user->get_fd_socket());
 		}

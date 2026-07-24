@@ -37,8 +37,8 @@ void Parser::splitArgs(std::string &str_to_spl, string_vector &args) const
 string_vector	Parser::extractArgs(const std::string &raw_msg) const
 {
 	string_vector	args;
-	std::string					pre_dots_string;
-	std::string					post_dots_string;
+	std::string		pre_dots_string;
+	std::string		post_dots_string;
 
 	int	dots_index = raw_msg.find(SPACE":"); //INDEX DOS PUNTOS
 	int	new_line_index; // INDEX DEL "\r\n"

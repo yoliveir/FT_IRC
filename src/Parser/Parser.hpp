@@ -18,9 +18,9 @@ class	Parser
 {
 	private:
 		string_vector	extractArgs(const std::string &raw_msg) const;
-		void						splitArgs(std::string	&str_to_spl, string_vector	&args) const;
-		void						printMsg(string_vector &args, int origin_fd) const;
+		void			splitArgs(std::string	&str_to_spl, string_vector	&args) const;
+		void			printMsg(string_vector &args, int origin_fd) const;
 	public:
-		void	parseMsg(User &user, Server &server);
+		void			parseMsg(User &user, Server &server);
 };
 
